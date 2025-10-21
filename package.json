@@ -1,0 +1,23 @@
+{
+  "name": "checkers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "start:server": "pnpm --filter server start",
+    "dev:server": "pnpm --filter server dev",
+    "start:client": "pnpm --filter client start",
+    "dev": "concurrently \"pnpm dev:server\" \"pnpm start:client\"" 
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.15.1",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
