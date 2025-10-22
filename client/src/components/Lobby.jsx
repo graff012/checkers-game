@@ -1,42 +1,34 @@
-
 import React, { useState } from "react";
 
-export default function Lobby({ socket, onJoined }) {
+export default function Lobby({ onCreate, onJoin }) {
   const [roomInput, setRoomInput] = useState("");
   const [error, setError] = useState(null);
 
-  function createRoom() {
-    socket.emit("create-room", {}, (res) => {
-      if (res && res.ok) {
-        onJoined(res.roomId, res.color, res.state);
-      } else {
-        setError("Failed to create room");
-      }
-    });
+  function handleCreate() {
+    setError(null);
+    onCreate();
   }
 
-  function joinRoom() {
+  function handleJoinClick() {
     setError(null);
-    if (!roomInput) return setError("Enter room code");
-    socket.emit("join-room", { roomId: roomInput.toUpperCase() }, (res) => {
-      if (res && res.ok) {
-        onJoined(roomInput.toUpperCase(), res.color, res.state);
-      } else {
-        setError(res ? res.reason : "Join failed");
-      }
-    });
+    if (!roomInput) {
+      setError("Enter room code");
+      return;
+    }
+    onJoin(roomInput);
   }
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <button className="px-3 py-2 bg-blue-600 text-white rounded" onClick={createRoom}>Create Room</button>
+    <div className="p-4 bg-white rounded shadow">
+      <div className="flex gap-3 mb-4">
+        <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={handleCreate}>Create Room</button>
+        <div className="flex items-center gap-2">
+          <input className="border p-2 rounded" placeholder="Room code (e.g. A3Z9Q2)" value={roomInput} onChange={e => setRoomInput(e.target.value)} />
+          <button className="px-3 py-2 bg-green-600 text-white rounded" onClick={handleJoinClick}>Join</button>
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <input className="border p-2 rounded" value={roomInput} onChange={(e) => setRoomInput(e.target.value)} placeholder="Room code" />
-        <button className="px-3 py-2 bg-green-600 text-white rounded" onClick={joinRoom}>Join</button>
-      </div>
-      {error && <div className="text-red-600 mt-2">{error}</div>}
+      {error && <div className="text-red-600">{error}</div>}
+      <div className="text-sm text-gray-500">You will get a reconnection token saved in localStorage so you can reload and rejoin automatically.</div>
     </div>
   );
 }

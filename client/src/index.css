@@ -1,1 +1,43 @@
 @import 'tailwindcss';
+
+/* board and pieces */
+.board {
+  @apply grid grid-cols-8 gap-0 select-none;
+}
+
+.square-dark {
+  @apply bg-amber-700;
+}
+
+.square-light {
+  @apply bg-amber-100;
+}
+
+/* piece circles */
+.piece-red {
+  @apply w-10 h-10 rounded-full flex items-center justify-center font-bold text-white bg-red-600;
+}
+
+.piece-black {
+  @apply w-10 h-10 rounded-full flex items-center justify-center font-bold text-white bg-gray-900;
+}
+
+/* king highlight + pop animation */
+.piece-king {
+  @apply ring-4 ring-yellow-300;
+  animation: king-pop 400ms ease;
+}
+
+@keyframes king-pop {
+  0% {
+    transform: scale(0.6);
+  }
+
+  60% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
